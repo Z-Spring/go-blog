@@ -29,15 +29,6 @@ type Student struct {
 
 func main() {
 	openDb()
-	// student := Student{
-	// 	Name: "op",
-	// 	Age:  23,
-	// }
-	// student.Create()
-	//get one post
-	// var getStudent Student
-	// DB.Where("name=?", "murphy").First(&getStudent)
-	// fmt.Println(getStudent)
 	mux := httprouter.New()
 	mux.GET("/student/:name", getStudentInfo)
 	server := &http.Server{
