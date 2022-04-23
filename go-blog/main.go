@@ -31,6 +31,7 @@ func main() {
 	openDb()
 	mux := httprouter.New()
 	mux.GET("/student/:name", getStudentInfo)
+	mux.DELETE("/student/:name", deleteStudentByName)
 	server := &http.Server{
 		Addr:    ":8080",
 		Handler: mux,
@@ -42,6 +43,11 @@ func getStudentInfo(w http.ResponseWriter, r *http.Request, p httprouter.Params)
 	result, _ := SearchByAuthor(p.ByName("name"))
 	fmt.Fprintln(w, result)
 }
+func deleteStudentByName(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	var s *Student
+	s.DeleteStudent(p.ByName("name"))
+	fmt.Fprint(w,"delete sucess!")
+}
 
 func (s *Student) Create() (err error) {
 	result := DB.Create(&s)
@@ -52,6 +58,11 @@ func (s *Student) Create() (err error) {
 
 func SearchByAuthor(name string) (student Student, err error) {
 	DB.Where("name=?", name).Find(&student)
+	return
+}
+
+func (s *Student) DeleteStudent(name string) (err error) {
+	DB.Where("name=?", name).Delete(&s)
 	return
 }
 
